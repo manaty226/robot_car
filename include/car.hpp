@@ -11,6 +11,7 @@ public:
     Car() {};
     Car(std::vector<IMotor*> motors) {
         Car::motors = motors;
+        Car::state = 0;
     };
     ~Car() {};
     void forward();
