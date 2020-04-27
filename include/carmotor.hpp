@@ -55,21 +55,21 @@ void CarMotor::backward(uint8_t &state) {
 void CarMotor::writeShiftregistor(uint8_t state) {
     std::cout << "write to shift registor" << " " << CarMotor::name << std::endl;
 
-    digitalWrite(MOTORLATCH, 0);
-    digitalWrite(MOTORDATA, 0);
+    // digitalWrite(MOTORLATCH, 0);
+    // digitalWrite(MOTORDATA, 0);
 
-    for(int i = 0; i < 8; i++) {
-        delayMicroseconds(1);
-        if(state & BIT(7 - i)) {
-            digitalWrite(MOTORDATA, 1);
-        } else {
-            digitalWrite(MOTORDATA, 0);
-        }
-        delayMicroseconds(1);
-        digitalWrite(MOTORCLK, 1);
-    }
+    // for(int i = 0; i < 8; i++) {
+    //     delayMicroseconds(1);
+    //     if(state & BIT(7 - i)) {
+    //         digitalWrite(MOTORDATA, 1);
+    //     } else {
+    //         digitalWrite(MOTORDATA, 0);
+    //     }
+    //     delayMicroseconds(1);
+    //     digitalWrite(MOTORCLK, 1);
+    // }
 
-    digitalWrite(MOTORLATCH, 1);
+    // digitalWrite(MOTORLATCH, 1);
 };
 
 #endif
