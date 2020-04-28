@@ -14,6 +14,7 @@
 #define BIT(bit) (1 << (bit))
 
 #ifdef WOWIRINGPI
+#define OUTPUT 0
 void digitalWrite(uint8_t pin, uint8_t level) {
     return;
 }
@@ -22,11 +23,13 @@ void delayMicroseconds(uint8_t time) {
     return;
 }
 
-void wiringPiSetup(uint8_t time) {
+void wiringPiSetup() {
     return;
 }
 
-void pinMode(int pin, )
+void pinMode(int pin, int direction) {
+    return;
+}
 
 #endif
 
@@ -38,7 +41,7 @@ public:
         CarMotor::bwBit = bw;
 
         int res = wiringPiSetup();
-        cout << res << endl;
+        std::cout << res << std::endl;
         pinMode(29, OUTPUT);
         pinMode(27, OUTPUT);
         pinMode(28, OUTPUT); 
