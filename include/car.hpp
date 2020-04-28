@@ -28,6 +28,7 @@ private:
 void Car::forward() {
     std::cout << "go forward." << std::endl;
     motors[0]->forward(Car::state);
+    std::cout << Car::state << std::endl;
     motors[1]->forward(Car::state);
     motors[2]->forward(Car::state);
     motors[3]->forward(Car::state);
