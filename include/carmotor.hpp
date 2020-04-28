@@ -21,6 +21,13 @@ void digitalWrite(uint8_t pin, uint8_t level) {
 void delayMicroseconds(uint8_t time) {
     return;
 }
+
+void wiringPiSetup(uint8_t time) {
+    return;
+}
+
+void pinMode(int pin, )
+
 #endif
 
 class CarMotor : public IMotor {
@@ -29,6 +36,12 @@ public:
         CarMotor::name = name;
         CarMotor::fwBit = fw;
         CarMotor::bwBit = bw;
+
+        wiringPiSetup();
+        pinMode(29, OUTPUT);
+        pinMode(27, OUTPUT);
+        pinMode(28, OUTPUT); 
+
     };
     void motorInit() {};
     void forward(uint8_t &state);
