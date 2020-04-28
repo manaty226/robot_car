@@ -42,9 +42,9 @@ public:
 
         int res = wiringPiSetup();
         std::cout << res << std::endl;
-        pinMode(29, OUTPUT);
-        pinMode(27, OUTPUT);
-        pinMode(28, OUTPUT); 
+        pinMode(MOTORDATA,  OUTPUT);
+        pinMode(MOTORCLK,   OUTPUT);
+        pinMode(MOTORLATCH, OUTPUT); 
 
     };
     void motorInit() {};
@@ -77,6 +77,8 @@ void CarMotor::writeShiftregistor(uint8_t state) {
 
     for(int i = 0; i < 8; i++) {
         delayMicroseconds(1);
+        digitalWrite (MOTORCLK, 0);
+
         if(state & BIT(7 - i)) {
             digitalWrite(MOTORDATA, 1);
         } else {
