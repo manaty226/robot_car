@@ -12,6 +12,7 @@ public:
     Car(std::vector<IMotor*> motors) {
         Car::motors = motors;
         Car::state = 0;
+        std::cout << Car::state << std::endl;
     };
     ~Car() {};
     void forward();
