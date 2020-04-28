@@ -37,7 +37,8 @@ public:
         CarMotor::fwBit = fw;
         CarMotor::bwBit = bw;
 
-        wiringPiSetup();
+        int res = wiringPiSetup();
+        cout << res << endl;
         pinMode(29, OUTPUT);
         pinMode(27, OUTPUT);
         pinMode(28, OUTPUT); 
