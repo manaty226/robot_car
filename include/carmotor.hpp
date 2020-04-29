@@ -23,8 +23,8 @@ void delayMicroseconds(uint8_t time) {
     return;
 }
 
-void wiringPiSetup() {
-    return;
+int wiringPiSetup() {
+    return 0;
 }
 
 void pinMode(int pin, int direction) {
