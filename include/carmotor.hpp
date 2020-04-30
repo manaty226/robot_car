@@ -3,6 +3,7 @@
 
 #include<iostream>
 #include<string>
+
 #include"motor.hpp"
 #ifndef WOWIRINGPI
 #include<wiringPi.h>
@@ -41,7 +42,6 @@ public:
         CarMotor::bwBit = bw;
 
         int res = wiringPiSetup();
-        std::cout << res << std::endl;
         pinMode(MOTORDATA,  OUTPUT);
         pinMode(MOTORCLK,   OUTPUT);
         pinMode(MOTORLATCH, OUTPUT); 
@@ -70,7 +70,7 @@ void CarMotor::backward(uint8_t &state) {
 }
 
 void CarMotor::writeShiftregistor(uint8_t state) {
-    std::cout << "write to shift registor" << " " << CarMotor::name << std::endl;
+    // std::cout << "write to shift registor" << " " << CarMotor::name << std::endl;
 
     digitalWrite(MOTORLATCH, 0);
     digitalWrite(MOTORDATA, 0);

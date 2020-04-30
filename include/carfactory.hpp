@@ -5,6 +5,7 @@
 #include"ifactory.hpp"
 #include"car.hpp"
 #include"carmotor.hpp"
+#include"engine.hpp"
 
 class CarFactory : public IAbstractFactory {
 
@@ -28,7 +29,11 @@ IVehicle* CarFactory::create() {
     IMotor* motor_4 = new CarMotor("right back", 0, 6);
     motors.push_back(motor_4);
 
+    // エンジンのセット
+    IEngine* engine = new Engine();
     IVehicle* car = new Car(motors);
+    car->setEngine((IEngine*)engine);
+
     return car;
 }
 
