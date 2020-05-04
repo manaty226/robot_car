@@ -10,6 +10,7 @@ public:
     virtual void motorInit() = 0;
     virtual void forward(uint8_t &state) = 0;
     virtual void backward(uint8_t &state) = 0;
+    virtual void stop(uint8_t &state) = 0;
 };
 
 #endif

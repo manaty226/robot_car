@@ -12,8 +12,10 @@ public:
     virtual void rightForward() = 0;
     virtual void leftBackward() = 0;
     virtual void rightBackward() = 0;
+    virtual void stop() = 0;
     virtual void setEngine(IEngine* engine) = 0;
     virtual void enginStart() = 0;
+
 };
 
 #endif

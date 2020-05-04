@@ -40,16 +40,11 @@ public:
         CarMotor::name = name;
         CarMotor::fwBit = fw;
         CarMotor::bwBit = bw;
-
-        int res = wiringPiSetup();
-        pinMode(MOTORDATA,  OUTPUT);
-        pinMode(MOTORCLK,   OUTPUT);
-        pinMode(MOTORLATCH, OUTPUT); 
-
     };
     void motorInit() {};
     void forward(uint8_t &state);
     void backward(uint8_t &state);
+    void stop(uint8_t &state);
     uint8_t fwBit;
     uint8_t bwBit;
 private:
@@ -68,6 +63,13 @@ void CarMotor::backward(uint8_t &state) {
     state |= BIT(bwBit);
     CarMotor::writeShiftregistor(state);
 }
+
+void CarMotor::stop(uint8_t &state) {
+    state &= ~BIT(fwBit);
+    state &= ~BIT(bwBit);
+    CarMotor::writeShiftregistor(state);
+}
+
 
 void CarMotor::writeShiftregistor(uint8_t state) {
     // std::cout << "write to shift registor" << " " << CarMotor::name << std::endl;

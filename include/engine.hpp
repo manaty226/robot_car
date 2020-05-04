@@ -23,16 +23,25 @@ class Engine: public IEngine {
 public:
     Engine():BLOCKSIZE(1024*4),halfPWMPeriod(5000) {
         motor_pwm[0] = 5;
-        motor_pwm[0] = 6;
-        motor_pwm[0] = 13;
-        motor_pwm[0] = 19;
+        motor_pwm[1] = 6;
+        motor_pwm[2] = 13;
+        motor_pwm[3] = 19;
+        for(int i = 0; i < 4; i++) {
+          prev_time[i] = 0;
+          curr_time[i] = 0;
+          time_stamp[i] = 0;
+          flag[i] = 0;
+        }
         this->setupIo();
+        this->myPWMInit();
     };
     void Start() {
+        isThreadContinued = true;
         t1 = new std::thread(&Engine::threadMain, this);
     }
     ~Engine() {
-        t1->detach();
+      isThreadContinued = false;
+      t1->join();
     }
 private:
     void setupIo();
@@ -49,6 +58,7 @@ private:
     unsigned char flag[4];
     int time_stamp[4];
     unsigned int motor_pwm[4];
+    bool isThreadContinued;
     std::thread* t1;
 };
 
@@ -83,6 +93,11 @@ void Engine::setupIo()
 
 void Engine::myPWMInit() 
 {
+  int res = wiringPiSetup();
+  pinMode(MOTORDATA,  OUTPUT);
+  pinMode(MOTORCLK,   OUTPUT);
+  pinMode(MOTORLATCH, OUTPUT);
+
   // Switch GPIO 7..11 to output mode
   INP_GPIO(MOTOR_1_PWM); // must use INP_GPIO before we can use OUT_GPIO
   OUT_GPIO(MOTOR_1_PWM);
@@ -95,10 +110,12 @@ void Engine::myPWMInit()
 }
 
 void Engine::threadMain() {
+  while(isThreadContinued) {
     mySoftPwmController(0, 5000);
     mySoftPwmController(1, 5000);
     mySoftPwmController(2, 5000);
     mySoftPwmController(3, 5000);
+  }
 }
 
 void Engine::mySoftPwmController(int idx, int speed) 

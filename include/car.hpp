@@ -20,13 +20,15 @@ public:
     };
     ~Car() {
         delete (Engine*)engine;
+        for(auto &m:motors) delete m;
     };
     void forward();
-    void backward(){};
-    void leftForward(){};
-    void rightForward(){};
-    void leftBackward(){};
-    void rightBackward(){};
+    void backward();
+    void leftForward();
+    void rightForward();
+    void leftBackward();
+    void rightBackward();
+    void stop();
     void setEngine(IEngine* engine);
     void enginStart();
 private:
@@ -48,6 +50,48 @@ void Car::forward() {
     motors[1]->forward(Car::state);
     motors[2]->forward(Car::state);
     motors[3]->forward(Car::state);
+}
+
+void Car::backward() {
+    motors[0]->backward(Car::state);
+    motors[1]->backward(Car::state);
+    motors[2]->backward(Car::state);
+    motors[3]->backward(Car::state);
+}
+
+void Car::rightForward() {
+    motors[0]->forward(Car::state);
+    motors[1]->stop(Car::state);
+    motors[2]->forward(Car::state);
+    motors[3]->stop(Car::state);
+}
+
+void Car::leftForward() {
+    motors[0]->stop(Car::state);
+    motors[1]->forward(Car::state);
+    motors[2]->stop(Car::state);
+    motors[3]->forward(Car::state);
+}
+
+void Car::rightBackward() {
+    motors[0]->backward(Car::state);
+    motors[1]->stop(Car::state);
+    motors[2]->backward(Car::state);
+    motors[3]->stop(Car::state);
+}
+
+void Car::leftBackward() {
+    motors[0]->stop(Car::state);
+    motors[1]->backward(Car::state);
+    motors[2]->stop(Car::state);
+    motors[3]->backward(Car::state);
+}
+
+void Car::stop() {
+    motors[0]->stop(Car::state);
+    motors[1]->stop(Car::state);
+    motors[2]->stop(Car::state);
+    motors[3]->stop(Car::state);
 }
 
 

@@ -8,8 +8,14 @@ int main() {
     IVehicle* car = carfactory->create();
 
     car->enginStart();
+    int i = 10000;
 
+    while(i--) {
+        car->forward();
+    }
+    car->stop();
 
+    delete car;
 
     return 0;
 }
