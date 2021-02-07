@@ -7,6 +7,10 @@
 #include<sys/mman.h>
 #include<thread>
 #include"iengine.hpp"
+#ifndef WOWIRINGPI
+#include<wiringPi.h>
+#endif
+
 
 
 #define INP_GPIO(g) *(gpio+((g)/10)) &= ~(7<<(((g)%10)*3))
@@ -32,7 +36,6 @@ public:
           time_stamp[i] = 0;
           flag[i] = 0;
         }
-        this->setupIo();
         this->myPWMInit();
     };
     void Start() {
@@ -48,6 +51,8 @@ private:
     void myPWMInit();
     void threadMain();
     void mySoftPwmController(int idx, int speed);
+    void inp_gpio(int g);
+    void out_gpio(int g);
     uint64_t get_pwm_timestamp();
     volatile unsigned* gpio;
     volatile void* gpio_map;
@@ -65,7 +70,8 @@ private:
 
 void Engine::setupIo()
 {
-    int mem_fd;
+
+  int mem_fd;
   /* open /dev/mem */
   if ((mem_fd = open("/dev/mem", O_RDWR | O_SYNC) ) < 0) {
     std::cout << "can't open /dev/mem \n" << std::endl;
@@ -87,26 +93,38 @@ void Engine::setupIo()
     std::cout << "mmap error " << std::endl;//errno also set!
     exit(-1);
   }
-  // Always use volatile pointer!
   gpio = (volatile unsigned *)gpio_map;
-} // setup_io
+}
 
 void Engine::myPWMInit() 
 {
-  int res = wiringPiSetup();
+  wiringPiSetup();
+  pinMode(MOTORLATCH, OUTPUT);
   pinMode(MOTORDATA,  OUTPUT);
   pinMode(MOTORCLK,   OUTPUT);
-  pinMode(MOTORLATCH, OUTPUT);
+
+  setupIo();
 
   // Switch GPIO 7..11 to output mode
-  INP_GPIO(MOTOR_1_PWM); // must use INP_GPIO before we can use OUT_GPIO
-  OUT_GPIO(MOTOR_1_PWM);
-  INP_GPIO(MOTOR_2_PWM); // must use INP_GPIO before we can use OUT_GPIO
-  OUT_GPIO(MOTOR_2_PWM);
-  INP_GPIO(MOTOR_3_PWM); // must use INP_GPIO before we can use OUT_GPIO
-  OUT_GPIO(MOTOR_3_PWM);
-  INP_GPIO(MOTOR_4_PWM); // must use INP_GPIO before we can use OUT_GPIO
-  OUT_GPIO(MOTOR_4_PWM);
+  inp_gpio(MOTOR_1_PWM); // must use INP_GPIO before we can use OUT_GPIO
+  out_gpio(MOTOR_1_PWM);
+  inp_gpio(MOTOR_2_PWM); // must use INP_GPIO before we can use OUT_GPIO
+  out_gpio(MOTOR_2_PWM);
+  inp_gpio(MOTOR_3_PWM); // must use INP_GPIO before we can use OUT_GPIO
+  out_gpio(MOTOR_3_PWM);
+  inp_gpio(MOTOR_4_PWM); // must use INP_GPIO before we can use OUT_GPIO
+  out_gpio(MOTOR_4_PWM);
+
+}
+
+void Engine::inp_gpio(int g)
+{
+  *(gpio+((g)/10)) &= ~(7<<(((g)%10)*3));
+}
+
+void Engine::out_gpio(int g)
+{
+  *(gpio+((g)/10)) |=  (1<<(((g)%10)*3));
 }
 
 void Engine::threadMain() {
@@ -133,11 +151,11 @@ void Engine::mySoftPwmController(int idx, int speed)
   *curr_time_ptr = get_pwm_timestamp();
   *time_stamp_ptr = *curr_time_ptr - *prev_time_ptr;
 
-  if(*time_stamp_ptr > 0 && *time_stamp_ptr <= 2 * halfPWMPeriod) {
+  if(*time_stamp_ptr > 0 && (unsigned int)*time_stamp_ptr <= 2 * halfPWMPeriod) {
     if(*time_stamp_ptr <= speed) GPIO_SET = 1 << motor_pwm[idx];
     else GPIO_CLR = 1 << motor_pwm[idx];
   }
-  if(*time_stamp_ptr > 2 * halfPWMPeriod) *flag_ptr = 0;
+  if((unsigned int)*time_stamp_ptr > 2 * halfPWMPeriod) *flag_ptr = 0;
 
 }
 

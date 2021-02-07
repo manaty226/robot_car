@@ -50,6 +50,7 @@ public:
 private:
     std::string name;
     void writeShiftregistor(uint8_t state);
+    void writeRegister(uint8_t data);
 };
 
 void CarMotor::forward(uint8_t &state) {
@@ -72,25 +73,29 @@ void CarMotor::stop(uint8_t &state) {
 
 
 void CarMotor::writeShiftregistor(uint8_t state) {
-    // std::cout << "write to shift registor" << " " << CarMotor::name << std::endl;
 
     digitalWrite(MOTORLATCH, 0);
     digitalWrite(MOTORDATA, 0);
 
-    for(int i = 0; i < 8; i++) {
-        delayMicroseconds(1);
-        digitalWrite (MOTORCLK, 0);
-
-        if(state & BIT(7 - i)) {
-            digitalWrite(MOTORDATA, 1);
-        } else {
-            digitalWrite(MOTORDATA, 0);
-        }
-        delayMicroseconds(1);
-        digitalWrite(MOTORCLK, 1);
-    }
+    writeRegister(state & BIT(7));
+    writeRegister(state & BIT(6));
+    writeRegister(state & BIT(5));
+    writeRegister(state & BIT(4));
+    writeRegister(state & BIT(3));
+    writeRegister(state & BIT(2));
+    writeRegister(state & BIT(1));
+    writeRegister(state & BIT(0));
 
     digitalWrite(MOTORLATCH, 1);
 };
+
+void CarMotor::writeRegister(uint8_t data)
+{
+    delayMicroseconds(1);
+    digitalWrite (MOTORCLK, 0);
+    digitalWrite(MOTORDATA, data);
+    delayMicroseconds(1);
+    digitalWrite(MOTORCLK, 1);
+}
 
 #endif
