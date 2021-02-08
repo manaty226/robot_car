@@ -8,6 +8,8 @@ public:
     virtual ~IVehicle() {};
     virtual void forward() = 0;
     virtual void backward() = 0;
+    virtual void right() = 0;
+    virtual void left() = 0;
     virtual void leftForward() = 0;
     virtual void rightForward() = 0;
     virtual void leftBackward() = 0;

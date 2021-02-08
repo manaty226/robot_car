@@ -29,10 +29,10 @@ int main() {
                 car->backward();
                 break;
             case KEY_LEFT:
-                car->leftForward();
+                car->left();
                 break;
             case KEY_RIGHT:
-                car->rightForward();
+                car->right();
                 break;
             default:
                 car->stop();

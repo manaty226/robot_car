@@ -14,16 +14,18 @@
 class Car : public IVehicle {
 public:
     Car() {};
-    Car(std::vector<IMotor*> motors) {
-        Car::motors = motors;
+    Car(IMotor* motor) {
+        Car::motor = motor;
         Car::state = 0;
     };
     ~Car() {
         delete (Engine*)engine;
-        for(auto &m:motors) delete m;
+        delete (IMotor*)motor;
     };
     void forward();
     void backward();
+    void right();
+    void left();
     void leftForward();
     void rightForward();
     void leftBackward();
@@ -33,7 +35,7 @@ public:
     void enginStart();
 private:
     uint8_t state;
-    std::vector<IMotor*> motors;
+    IMotor* motor;
     IEngine* engine;
 };
 
@@ -46,52 +48,46 @@ void Car::setEngine(IEngine* engine) {
 }
 
 void Car::forward() {
-    motors[0]->forward(Car::state);
-    motors[1]->forward(Car::state);
-    motors[2]->forward(Car::state);
-    motors[3]->forward(Car::state);
+    motor->forward();
 }
 
 void Car::backward() {
-    motors[0]->backward(Car::state);
-    motors[1]->backward(Car::state);
-    motors[2]->backward(Car::state);
-    motors[3]->backward(Car::state);
+    motor->backward();
 }
 
+void Car::right()
+{
+    motor->right();
+}
+
+void Car::left()
+{
+    motor->left();
+}
+
+
 void Car::rightForward() {
-    motors[0]->forward(Car::state);
-    motors[1]->stop(Car::state);
-    motors[2]->forward(Car::state);
-    motors[3]->stop(Car::state);
+    // motors[0]->forward(Car::state);
+    // motors[1]->stop(Car::state);
+    // motors[2]->forward(Car::state);
+    // motors[3]->stop(Car::state);
 }
 
 void Car::leftForward() {
-    motors[0]->stop(Car::state);
-    motors[1]->forward(Car::state);
-    motors[2]->stop(Car::state);
-    motors[3]->forward(Car::state);
+    // motors[0]->stop(Car::state);
+    // motors[1]->forward(Car::state);
+    // motors[2]->stop(Car::state);
+    // motors[3]->forward(Car::state);
 }
 
 void Car::rightBackward() {
-    motors[0]->backward(Car::state);
-    motors[1]->stop(Car::state);
-    motors[2]->backward(Car::state);
-    motors[3]->stop(Car::state);
 }
 
 void Car::leftBackward() {
-    motors[0]->stop(Car::state);
-    motors[1]->backward(Car::state);
-    motors[2]->stop(Car::state);
-    motors[3]->backward(Car::state);
 }
 
 void Car::stop() {
-    motors[0]->stop(Car::state);
-    motors[1]->stop(Car::state);
-    motors[2]->stop(Car::state);
-    motors[3]->stop(Car::state);
+    motor->stop();
 }
 
 
